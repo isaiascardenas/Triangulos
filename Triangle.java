@@ -33,9 +33,18 @@ public class Triangle
 		this.lines[pos] = line;
 	}
 
-	public void setCurrentLine(int line)
+	public void setCurrentLine(String line)
 	{
-		this.currentLine = line;
+		int n = 1;
+		for (int i = 0; i<line.length(); i++) {
+				if (i+1 < line.length() && line.charAt(i+1) == '#') {
+				this.currentLine = n/2;	
+				return ;		
+			}
+			n++;
+		}
+		this.currentLine = n/2;
+		return ;
 	}
 
 	public void setMaxArea(int area)
@@ -93,11 +102,10 @@ public class Triangle
 
 	public boolean checkDownTriangle()
 	{
-		if (true) {
-			for (int i=this.pivot; i>this.pivot-2*(this.currentLine); i--) {
+		if (this.pivot < this.lines[this.currentLine].length()-2) {
+			for (int i=this.pivot; i>this.pivot+2*(this.currentLine); i++) {
 				if (this.lines[this.currentLine].charAt(i) == '#') {
 					this.currentLine = 0;
-
 					return false;
 				}
 			}
@@ -112,19 +120,18 @@ public class Triangle
 	{
 		int area = 0;
 		if (isOdd) {
-			while(this.checkUpTriangle(this.currentLine)) {
-			area += 2*this.currentLine+1;
-			this.currentLine++;
+			while(this.checkUpTriangle()) {
+				area += 2*this.currentLine+1;
+				this.currentLine++;
+			}
 		} else {
-			while(this.checkDownTriangle(this.currentLine)) {
-			area += 2*this.currentLine+1;
-			this.currentLine++;
+			while(this.checkDownTriangle()) {
+				area += 2*this.currentLine+1;
+				this.currentLine++;
+			}
 		}
 		
 		return area;
-
-		//down (odd)
-		
 	}
 
 	public int getMaxArea()
@@ -139,6 +146,8 @@ public class Triangle
 				}
 				else if (this.lines[i].charAt(j) == '-' && j%2 ==0) {
 					this.pivot = j;
+					this.setCurrentLine(this.lines[i]);
+					
 					if (this.getArea(false) > this.maxArea) {
 						this.maxArea = this.getArea(false);
 					}	
