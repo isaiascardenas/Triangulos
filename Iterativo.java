@@ -1,5 +1,5 @@
 
-public class Triangle 
+public class Iterativo 
 {
 
 	private int currentLine;
@@ -8,7 +8,7 @@ public class Triangle
 	private int pivot;
 	private int maxArea;
 
-	public Triangle()
+	public Iterativo()
 	{
 		this.currentLine = 0;
 		this.high = 0;
@@ -59,33 +59,9 @@ public class Triangle
 		this.pivot = pivot;
 	}
 
-	//
-
-	public String[] getLines()
-	{
-		return this.lines;
-	}
-
-	public String getLine(int pos)
-	{
-		return this.lines[pos];
-	}
-
-	public int getHigh()
-	{
-		return this.high;
-	}
-	
-	public int getPivot()
-	{
-		return this.pivot;
-	}
-
-	//
-
 	public boolean checkUpTriangle()
 	{
-		if (this.pivot >= 3 && this.pivot-2*(this.currentLine) > 0 && this.pivot < lines[this.currentLine].length()) {
+		if (this.pivot >= 3 && this.pivot-2*this.currentLine > 0 && this.pivot < lines[this.currentLine].length()) {
 			for (int i=this.pivot; i>this.pivot-2*(this.currentLine); i--) {
 				if (this.lines[this.currentLine].charAt(i) == '#') {
 					this.currentLine = 0;
