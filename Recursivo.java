@@ -14,7 +14,6 @@ public class Recursivo
 		this.maxArea = 0;
 	}
 
-
 	public void setHigh(int high)
 	{
 		this.high = high;
@@ -98,7 +97,7 @@ public class Recursivo
 		for (int i=pivot; i<=endPivot; i++) {
 			if (this.lines[row + this.currentLine].charAt(i) == '#') {
 				return 0;	
-				}	
+			}	
 		}
 		return endPivot - pivot + 1 + this.getDownArea(pivot, endPivot-2, row+1);
 	}

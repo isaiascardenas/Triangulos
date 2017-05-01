@@ -1,21 +1,19 @@
 
 public class Iterativo 
 {
-
 	private int currentLine;
 	private int high;
 	private String[] lines;
 	private int pivot;
 	private int maxArea;
 
-	public Iterativo()
+	public void Iterativo()
 	{
 		this.currentLine = 0;
 		this.high = 0;
 		this.lines = null;
 		this.pivot = 0;
 		this.maxArea = 0;
-
 	}
 	
 	public void setHigh(int high)
@@ -33,39 +31,19 @@ public class Iterativo
 		this.lines[pos] = line;
 	}
 
-	public void setCurrentLine(String line)
+	public int getMaxArea()
 	{
-		int n = 1;
-		for (int i = 0; i<line.length(); i++) {
-				if (i+1 < line.length() && line.charAt(i+1) == '#') {
-				this.currentLine = n/2;	
-				return ;		
-			}
-			n++;
-		}
-		this.currentLine = n/2;
-		return ;
+		this.setUpArea();
+		this.setDownArea();
+		return this.maxArea;
 	}
 
-	public void setMaxArea(int area)
-	{
-		if (area > this.maxArea) {
-			this.maxArea = area;
-		}
-	}
-
-	public void setPivot(int pivot)
-	{
-		this.pivot = pivot;
-	}
-
-	public boolean checkUpTriangle()
+	private boolean checkUpTriangle()
 	{
 		if (this.pivot >= 3 && this.pivot-2*this.currentLine > 0 && this.pivot < lines[this.currentLine].length()) {
 			for (int i=this.pivot; i>this.pivot-2*(this.currentLine); i--) {
 				if (this.lines[this.currentLine].charAt(i) == '#') {
 					this.currentLine = 0;
-
 					return false;
 				}
 			}
@@ -76,60 +54,60 @@ public class Iterativo
 		return false;	
 	}
 
-	public boolean checkDownTriangle()
+	private boolean checkDownTriangle(int row)
 	{
-		if (this.pivot < this.lines[this.currentLine].length()-2) {
-			for (int i=this.pivot; i>this.pivot+2*(this.currentLine); i++) {
+		if (this.currentLine >= 0) {
+			for (int i=this.pivot; i<=this.pivot+2*row; i++) {
 				if (this.lines[this.currentLine].charAt(i) == '#') {
-					this.currentLine = 0;
 					return false;
 				}
 			}
 			return true;
 		}
-		this.currentLine = 0;
-
 		return false;	
 	}
 
-	public int getArea(boolean isOdd)
+	private void setUpArea()
 	{
 		int area = 0;
-		if (isOdd) {
-			while(this.checkUpTriangle()) {
-				area += 2*this.currentLine+1;
-				this.currentLine++;
-			}
-		} else {
-			while(this.checkDownTriangle()) {
-				area += 2*this.currentLine+1;
-				this.currentLine++;
-			}
-		}
-		
-		return area;
-	}
-
-	public int getMaxArea()
-	{
+		this.currentLine = 0;
 		for (int i=0; i<this.high; i++) {
 			for (int j=0; j<this.lines[i].length(); j++) {
-				if (this.lines[i].charAt(j) == '-' && j%2 ==1) {
+				if (this.lines[i].charAt(j) == '-' && j%2 == 1) {
 					this.pivot = j;
-					if (this.getArea(true) > this.maxArea) {
-						this.maxArea = this.getArea(true);
+					while(this.checkUpTriangle()) {
+						area += 2*this.currentLine+1;
+						this.currentLine++;
+					}
+					if (area > this.maxArea) {
+						this.maxArea = area;
 					}	
-				}
-				else if (this.lines[i].charAt(j) == '-' && j%2 ==0) {
-					this.pivot = j;
-					this.setCurrentLine(this.lines[i]);
-					
-					if (this.getArea(false) > this.maxArea) {
-						this.maxArea = this.getArea(false);
-					}	
+					area = 0;
 				}
 			}
 		}
-		return this.maxArea;
+	}
+
+	private void setDownArea()
+	{
+		int area = 0;
+		for (int i=this.high-1; i>=0; i--) {
+			this.currentLine = i;
+			for (int j=0; j<this.lines[i].length(); j++) {
+				if (this.lines[i].charAt(j) == '-' && j%2 == 0) {
+					this.pivot = j;
+					int row = 0;
+					while(this.checkDownTriangle(row)) {
+						area += 2*row+1;
+						row++;
+						this.currentLine--;
+					}
+					if (area > this.maxArea) {
+						this.maxArea = area;
+					}	
+					area = 0;
+				}
+			}
+		}
 	}
 }
